@@ -14,12 +14,16 @@ public class LogInterceptor implements HandlerInterceptor {
 
     public static final String LOG_ID = "logId";
 
+    /**
+     * 컨트롤러 호출 전에 호출됨
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         String uuid = UUID.randomUUID().toString();
 
         request.setAttribute(LOG_ID, uuid);
+        //서블릿 필터의 경우 지역변수로 담아둠! But 스프링 인터셉터의 경우 에러 난 경우 postHandle이 호출 X, 따라서 request에 담아둠!
 
         //@RequestMapping: HandlerMethod
         //정적 리소스: ResourceHttpRequestHandler
@@ -30,16 +34,22 @@ public class LogInterceptor implements HandlerInterceptor {
         log.info("REQUEST [{}][{}][{}]", uuid, requestURI, handler);
         return true; //false 진행X
     }
-    
+
+    /**
+     * 컨트롤러 호출 후에 호출됨(예외 발생시 postHandle 호출 X)
+     */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         log.info("postHandler [{}]", modelAndView);
     }
 
+    /**
+     * 뷰가 렌더링 된 이후에 호출됨(예외 발생해도 항상 호출 O - 공통 처리)
+     */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         String requestURI = request.getRequestURI();
-        String uuid = (String) request.getAttribute(LOG_ID);
+        String uuid = (String) request.getAttribute(LOG_ID); //공통 처리(preHandle: setAttribute)
         log.info("RESPONSE [{}][{}][{}]", uuid, requestURI, handler);
         if (ex != null) {
             log.error("afterCompletion error!!", ex);
