@@ -56,7 +56,6 @@ public class LogInterceptor implements HandlerInterceptor {
         log.info("RESPONSE [{}][{}][{}]", uuid, requestURI, handler);
         if (ex != null) {
             log.error("afterCompletion error!!", ex);
-
         }
 
     }
