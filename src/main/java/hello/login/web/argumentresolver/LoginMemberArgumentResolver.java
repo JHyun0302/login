@@ -12,6 +12,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * 로그인 회원을 편리하게 찾기 (ArgumentResolver 사용)
+ */
 @Slf4j
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
     @Override

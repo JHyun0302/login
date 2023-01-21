@@ -1,9 +1,12 @@
 package hello.login;
 
 import hello.login.web.filter.LogFilter;
+import hello.login.web.filter.LoginCheckFilter;
 import hello.login.web.interceptor.LogInterceptor;
 import hello.login.web.interceptor.LoginCheckInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,18 +30,16 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         //LogInterceptor
         registry.addInterceptor(new LogInterceptor())
-                .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", ",*.ico", "/error");
+                .order(1) //인터셉터 호출 순서
+                .addPathPatterns("/**") //인터셉터를 적용할 URL 패턴
+                .excludePathPatterns("/css/**", ",*.ico", "/error"); //인터셉터에서 제외할 패턴
 
         //LoginCheckInterceptor
         registry.addInterceptor(new LoginCheckInterceptor())
-                .order(2)
-                .addPathPatterns("/**")
+                .order(2) //인터셉터 호출 순서
+                .addPathPatterns("/**") //인터셉터를 적용할 URL 패턴
                 .excludePathPatterns("/", "/members/add", "/login", "/logout",
-                        "/css/**", "/*.ico", "/error");
-
-
+                        "/css/**", "/*.ico", "/error"); //인터셉터에서 제외할 패턴
     }
 
     /**
@@ -54,7 +55,7 @@ public class WebConfig implements WebMvcConfigurer {
         return filterRegistrationBean;
     }
 
-   /* @Autowired
+    @Autowired
     LoginCheckFilter loginCheckFilter; //스프링 빈으로 의존관계 주입 형식
 
     @Bean //LoginCheckFilter 작동을 위해 필요
@@ -65,5 +66,5 @@ public class WebConfig implements WebMvcConfigurer {
 
         filterRegistrationBean.addUrlPatterns("/*"); //모든 url에 적용
         return filterRegistrationBean;
-    }*/
+    }
 }
