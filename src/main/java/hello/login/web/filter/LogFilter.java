@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * 서블릿 필터
+ */
 @Slf4j
 public class LogFilter implements Filter {
     @Override

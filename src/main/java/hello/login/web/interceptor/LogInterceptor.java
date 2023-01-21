@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+/**
+ * 스프링 인터셉터(스프링 MVC 이용)
+ */
 @Slf4j
 public class LogInterceptor implements HandlerInterceptor {
 
