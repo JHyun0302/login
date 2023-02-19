@@ -27,6 +27,9 @@ public class HomeController {
         return "home";
     }
 
+    /**
+     * home 화면 접속: 로그인 한 사람 & 안 한 사람 분리
+     */
     //    @GetMapping("/") //required = false -> 로그인 안 한 사용자도 접속가능
     public String homeLogin(@CookieValue(name = "memberId", required = false) Long memberId, Model model) {
         if (memberId == null) {
@@ -43,6 +46,10 @@ public class HomeController {
         return "loginHome";
     }
 
+    /**
+     * "sessionManager" 통한 로그인 처리
+     */
+
     //    @GetMapping("/")
     public String homeLoginV2(HttpServletRequest request, Model model) {
         //세션 관리자에 저장된 회원 정보 조회
@@ -57,16 +64,17 @@ public class HomeController {
         return "loginHome";
     }
 
+    /**
+     * "HttpSession" 통한 로그인 처리
+     */
     //    @GetMapping("/")
     public String homeLoginV3(HttpServletRequest request, Model model) {
-
         HttpSession session = request.getSession(false);
         if (session == null) {
             return "home";
         }
 
         Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-
 
         //세션에 회원 데이터가 없으면 home
         if (loginMember == null) {
@@ -78,6 +86,11 @@ public class HomeController {
         return "loginHome";
     }
 
+    /**
+     * 스프링이 한번에 편리하게 로그인 처리
+     * "@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)"
+     * 이미 로그인 된 사용자를 찾을 때 사용 - 세션을 생성하지 않는다!
+     */
     //    @GetMapping("/")
     public String homeLoginV3Spring(
             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, Model model) {
@@ -91,6 +104,11 @@ public class HomeController {
         return "loginHome";
     }
 
+    /**
+     * ArgumentResolver 활용: 로그인 회원 편하게 찾기
+     *
+     * @Login Member loginMember
+     */
     @GetMapping("/")
     public String homeLoginV3ArgumentResolver(@Login Member loginMember, Model model) {
         //세션에 회원 데이터가 없으면 home
