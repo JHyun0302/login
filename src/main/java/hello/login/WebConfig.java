@@ -17,7 +17,7 @@ import javax.servlet.Filter;
 import java.util.List;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer { //implements WebMvcConfigurer: 스프링 인터셉터 등록
     /**
      * argumentResolver 작동을 위해 등록
      */
