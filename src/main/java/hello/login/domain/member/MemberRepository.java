@@ -23,7 +23,7 @@ public class MemberRepository {
         return store.get(id);
     }
 
-    public Optional<Member> findByloginId(String loginId) {
+    public Optional<Member> findByLoginId(String loginId) {
 /*        List<Member> all = findAll();
         for (Member m : all) {
             if (m.getLoginId().equals(loginId)) {
