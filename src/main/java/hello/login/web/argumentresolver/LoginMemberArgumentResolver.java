@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * 로그인 회원을 편리하게 찾기 (ArgumentResolver 사용)
+ * ArgumentResolver 사용
+ * "implements HandlerMethodArgumentResolver" 안하면 @ModelAttribute 처럼 행동함!
  */
 @Slf4j
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
@@ -23,10 +24,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
         //직접 만든 @Login가 파라미터에 붙어있는지?
-        boolean hashMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
-        //.getParameterType() == @Login Member loginMember에 hashMemberType: Member 타입이냐?
+        boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
+        //@Login이 붙은 파라미의 타입이 Member 인가?
 
-        return hasLoginAnnotation && hashMemberType;
+        return hasLoginAnnotation && hasMemberType; //둘 다 true이면 resolveArgument() 실행!
     }
 
     @Override
