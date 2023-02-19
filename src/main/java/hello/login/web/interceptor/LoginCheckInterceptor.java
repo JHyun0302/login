@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * 스프링 인터셉터를 이용한 인증 체크
+ * 인증은 컨트롤러 호출 전에만 하면 됨! == preHandle만 구현하면 됨!
+ */
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor {
-    /**
-     * 인증은 컨트롤러 호출 전에만 하면 됨! == preHandle만 구현하면 됨!
-     */
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
