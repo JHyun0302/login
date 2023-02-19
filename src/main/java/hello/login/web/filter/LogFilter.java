@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * 서블릿 필터
+ * 서블릿 필터 - 요청 로그
  */
 @Slf4j
 public class LogFilter implements Filter {
