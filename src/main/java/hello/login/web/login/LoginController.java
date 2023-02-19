@@ -31,6 +31,10 @@ public class LoginController {
         return "/login/loginForm";
     }
 
+    /**
+     * 쿠키(memberId)를 사용한 로그인
+     */
+
     //    @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
@@ -74,6 +78,10 @@ public class LoginController {
         return "redirect:/";
     }
 
+    /**
+     * 직접 만든 세션이 아닌 HttpSession 사용
+     */
+
     //    @PostMapping("/login")
     public String loginV3(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -82,7 +90,6 @@ public class LoginController {
 
         Member loginMember = loginService.login(form.getLoginId(), form.getPassword());
         log.info("login? {}", loginMember);
-        //id, password - 특정 필드 문제가 아님!
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "login/loginForm";
@@ -91,11 +98,15 @@ public class LoginController {
         //로그인 성공 처리 TODO
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성(기본값: getSession(true))
         HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember); //sessionManager.createSession(loginMember, response);
+        //세션에 로그인 회원 정보 보관 = sessionManager.createSession(loginMember, response);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
         return "redirect:/";
     }
 
+    /**
+     * @RequestParam(defaultValue = "/") String redirectURL
+     * 로그인하면 원래 있던 페이지로 redirect
+     */
     @PostMapping("/login")
     public String loginV4(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
                           @RequestParam(defaultValue = "/") String redirectURL,
@@ -107,7 +118,6 @@ public class LoginController {
 
         Member loginMember = loginService.login(form.getLoginId(), form.getPassword());
         log.info("login? {}", loginMember);
-        //id, password - 특정 필드 문제가 아님!
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "login/loginForm";
@@ -121,18 +131,27 @@ public class LoginController {
         return "redirect:" + redirectURL;
     }
 
+    /**
+     * 로그아웃: 쿠키 만료(cookie.setMaxAge(0))
+     */
     //    @PostMapping("/logout")
     public String logout(HttpServletResponse response) {
         expireCookie(response, "memberId");
         return "redirect:/";
     }
 
+    /**
+     * 로그아웃: 직접 만든 쿠키
+     */
     //    @PostMapping("/logout")
     public String logoutV2(HttpServletRequest request) {
         sessionManager.expire(request);
         return "redirect:/";
     }
 
+    /**
+     * 로그아웃: HttpSession 쿠키
+     */
     @PostMapping("/logout")
     public String logoutV3(HttpServletRequest request) {
         //세션 삭제, true(기본 값): 세션이 없으면 신규 세션 생성
